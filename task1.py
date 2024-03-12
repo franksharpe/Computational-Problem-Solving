@@ -96,8 +96,7 @@ orders = load_orders_from_file(filename)  # Load orders from the file
 
 # Perform operations (add, delete, modify)
 order_add(firstaid, orders)
-delete_order(orders)
 modify_order(orders)
-
+delete_order(orders)
 # Save the updated orders to the file
 save_orders_to_file(filename, orders)
