@@ -35,7 +35,7 @@ def order_add(firstaid, orders):
     orderid = random.randint(0, 5000)  # Generate a random order ID
     print("Order ID:", orderid)
     
-    while len(order) < 5:  # Allowing a maximum of 5 items per order
+    while len(order) < 1:  # Allowing a maximum of 5 items per order
         product_code = input("Enter the product code (e.g., 1001) or 'done' to finish: ")
         if product_code == "done":
             break
@@ -65,7 +65,7 @@ def modify_order(orders, firstaid):
         print("Current order:", orders[orderid])
         new_order = []  # Create a new order to replace the existing one
         count = 0  # Initialize count of items added
-        while count < 5:  # Allowing a maximum of 5 items per order
+        while count < 1:  # Allowing a maximum of 5 items per order
             product_code = input("Enter the new product code (e.g., 1001) or 'done' to finish: ")
             if product_code == "done":
                 break
@@ -114,13 +114,19 @@ while True:
         print("")
         print("")
         order_add(firstaid, orders)
+        # Print the location where the order file is saved
+        print("Orders saved to:", os.path.abspath(filename))
     elif option == 2:
         print(firstaid)
         print("")
         print("")
         modify_order(orders, firstaid)
+        # Print the location where the order file is saved
+        print("Orders saved to:", os.path.abspath(filename))
     elif option == 3:
         delete_order(orders)
+        # Print the location where the order file is saved
+        print("Orders saved to:", os.path.abspath(filename))
     elif option == 4:
         break
     else:
