@@ -2,7 +2,7 @@ import random
 import os, psutil
 process = psutil.Process()
 print("memory used: ")
-print(process.memory_info().rss / 1e+6 + " megabytes")  # in megabytes 
+print(process.memory_info().rss / 1e+6 )  # in megabytes 
 print("")
 print("")
 
