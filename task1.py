@@ -1,17 +1,18 @@
 import random
-import os, psutil
+import os
+import psutil
+
+#shows the memeory used by program
 process = psutil.Process()
 print("memory used: ")
 print(process.memory_info().rss / 1e+6 )  # in megabytes 
 print("")
 print("")
 
-
 # Function to load orders from a text file
 def load_orders_from_file(filename):
     try:
         with open(filename, "r") as file:
-            # Read lines from the file and split each line into order ID and items
             orders = {}
             for line in file:
                 orderid, items = line.strip().split(":")
@@ -24,7 +25,6 @@ def load_orders_from_file(filename):
 def save_orders_to_file(filename, orders):
     with open(filename, "w") as file:
         for orderid, items in orders.items():
-            # Write each order as "orderid: item1, item2, item3"
             file.write(f"{orderid}: {', '.join(items)}\n")
             
             
@@ -101,36 +101,38 @@ firstaid = {  # Define the first aid items with their corresponding codes
 }
 orders = load_orders_from_file(filename)  # Load orders from the file
 
-
-
-print("---------------------")
-print("---------------------")
-print("------  Menu  -------")
-print("---------------------")
-print("---------------------")
-print("")
-print("")
-print("Pick what you would like to do?:")
-print("1 is make an order")
-print("2 is modify your order")
-print("3 is to delete your order")
-optiont = int(input("Choose an option: "))
-
-# Perform operations (add, delete, modify)
-
-if optiont == 1:  
-    print(firstaid)
+while True:
+    print("---------------------")
+    print("---------------------")
+    print("------  Menu  -------")
+    print("---------------------")
+    print("---------------------")
     print("")
     print("")
-    order_add(firstaid, orders)
-    
-elif optiont == 2:
-    modify_order(orders)
-elif optiont == 3:
-    delete_order(orders)
-else:
-    print("Invalid option. Please choose again.")
+    print("Pick what you would like to do?:")
+    print("1 is make an order")
+    print("2 is modify your order")
+    print("3 is to delete your order")
+    print("4 is to exit")
+    option = int(input("Choose an option: "))
 
- # Save the updated orders to the file
-save_orders_to_file(filename, orders)  
+    # Perform operations (add, delete, modify, exit)
+    if option == 1:  
+        print(firstaid)
+        print("")
+        print("")
+        order_add(firstaid, orders)
+    elif option == 2:
+        print(firstaid)
+        print("")
+        print("")
+        modify_order(orders, firstaid)
+    elif option == 3:
+        delete_order(orders)
+    elif option == 4:
+        break
+    else:
+        print("Invalid option. Please choose again.")
 
+# Save the updated orders to the file
+save_orders_to_file(filename, orders)
