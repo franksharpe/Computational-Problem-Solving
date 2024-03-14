@@ -94,9 +94,35 @@ firstaid = {  # Define the first aid items with their corresponding codes
 }
 orders = load_orders_from_file(filename)  # Load orders from the file
 
+
+
+print("---------------------")
+print("---------------------")
+print("------  Menu  -------")
+print("---------------------")
+print("---------------------")
+
+print("Pick what you would like to do?:")
+print("1 is make an order")
+print("2 is modify your order")
+print("3 is to delete your order")
+optiont = int(input("Choose an option: "))
+
 # Perform operations (add, delete, modify)
-order_add(firstaid, orders)
-modify_order(orders)
-delete_order(orders)
-# Save the updated orders to the file
-save_orders_to_file(filename, orders)
+if optiont == 1:
+    order_add(firstaid, orders)
+    # Save the updated orders to the file
+    save_orders_to_file(filename, orders)
+elif optiont == 2:
+    modify_order(orders)
+    # Save the updated orders to the file
+    save_orders_to_file(filename, orders)
+elif optiont == 3:
+    delete_order(orders)
+    # Save the updated orders to the file
+    save_orders_to_file(filename, orders)
+else:
+    print("Invalid option. Please choose again.")
+
+    
+
