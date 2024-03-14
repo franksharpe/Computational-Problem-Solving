@@ -101,7 +101,8 @@ print("---------------------")
 print("------  Menu  -------")
 print("---------------------")
 print("---------------------")
-
+print("")
+print("")
 print("Pick what you would like to do?:")
 print("1 is make an order")
 print("2 is modify your order")
@@ -109,20 +110,20 @@ print("3 is to delete your order")
 optiont = int(input("Choose an option: "))
 
 # Perform operations (add, delete, modify)
-if optiont == 1:
+
+if optiont == 1:  
+    print(firstaid)
+    print("")
+    print("")
     order_add(firstaid, orders)
-    # Save the updated orders to the file
-    save_orders_to_file(filename, orders)
+    
 elif optiont == 2:
     modify_order(orders)
-    # Save the updated orders to the file
-    save_orders_to_file(filename, orders)
 elif optiont == 3:
     delete_order(orders)
-    # Save the updated orders to the file
-    save_orders_to_file(filename, orders)
 else:
     print("Invalid option. Please choose again.")
 
-    
+ # Save the updated orders to the file
+save_orders_to_file(filename, orders)  
 
