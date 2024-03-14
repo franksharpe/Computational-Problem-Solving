@@ -1,4 +1,11 @@
 import random
+import os, psutil
+process = psutil.Process()
+print("memory used: ")
+print(process.memory_info().rss / 1e+6 + " megabytes")  # in megabytes 
+print("")
+print("")
+
 
 # Function to load orders from a text file
 def load_orders_from_file(filename):

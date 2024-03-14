@@ -1,3 +1,11 @@
+import os, psutil
+process = psutil.Process()
+print("memory used: ")
+print(process.memory_info().rss / 1e+6 + " megabytes")  # in megabytes 
+print("")
+print("")
+
+
 defective_prob_u = 0.20  # Probability of receiving a defective item from Uzumaki Safety Suppliers
 defective_prob_k = 0.10  # Probability of receiving a defective item from Khairan Safety Company
 defective_prob_l = 0  # Probability of receiving a defective item from Leaf First-Aid Kits Ltd
