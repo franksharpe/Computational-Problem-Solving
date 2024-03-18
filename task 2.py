@@ -2,13 +2,16 @@
 import random
 import os
 import psutil
+from memory_profiler import profile
+
+@profile
 
 #shows the memeory used by program
-process = psutil.Process()
-print("memory used: ")
-print(process.memory_info().rss / 1e+6 )  # in megabytes 
-print("")
-print("")
+#process = psutil.Process()
+#print("memory used: ")
+#print(process.memory_info().rss / 1e+6 )  # in megabytes 
+#print("")
+#print("")
 
 # Function to load orders from a text file
 def load_orders_from_file(filename):
