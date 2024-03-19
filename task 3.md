@@ -1,6 +1,6 @@
 task 3 
 
-
+![alt text](image.png)
 
 
 Comparison of Algorithms from Task 1 and Task 2
