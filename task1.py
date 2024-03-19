@@ -3,15 +3,6 @@ import os
 import psutil
 from memory_profiler import profile
 
-@profile
-
-#shows the memeory used by program
-#process = psutil.Process()
-#print("memory used: ")
-#print(process.memory_info().rss / 1e+6 )  # in megabytes 
-#print("")
-#print("")
-
 # Function to load orders from a text file
 def load_orders_from_file(filename):
     try:
@@ -30,9 +21,10 @@ def save_orders_to_file(filename, orders):
         for orderid, items in orders.items():
             file.write(f"{orderid}: {', '.join(items)}\n")
             
-            
+@profile
 # Function to add an order
 def order_add(firstaid, orders):
+    before_memory = psutil.Process().memory_info().rss / 1e6
     order = []  # Create an empty list to store the order items
     orderid = random.randint(0, 5000)  # Generate a random order ID
     print("Order ID:", orderid)
@@ -49,19 +41,26 @@ def order_add(firstaid, orders):
             print("Invalid product code. Please try again.")
 
     orders[orderid] = order  # Add the order to the orders dictionary
-    
-    
+    after_memory = psutil.Process().memory_info().rss / 1e6
+    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
+
+@profile
 # Function to delete an order
 def delete_order(orders):
+    before_memory = psutil.Process().memory_info().rss / 1e6
     orderid = int(input("Enter the order ID to delete: "))
     if orderid in orders:
         del orders[orderid]
         print(f"Order with ID {orderid} deleted successfully.")
     else:
         print("Order ID not found.")
+    after_memory = psutil.Process().memory_info().rss / 1e6
+    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
 
+@profile
 # Function to modify an order
 def modify_order(orders, firstaid):
+    before_memory = psutil.Process().memory_info().rss / 1e6
     orderid = int(input("Enter the order ID to modify: "))
     if orderid in orders:
         print("Current order:", orders[orderid])
@@ -82,6 +81,8 @@ def modify_order(orders, firstaid):
         print("Order modified successfully.")
     else:
         print("Order ID not found.")
+    after_memory = psutil.Process().memory_info().rss / 1e6
+    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
 
 
 # Main part of the code
