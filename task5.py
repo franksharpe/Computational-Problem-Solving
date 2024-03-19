@@ -1,9 +1,4 @@
-import os, psutil
-process = psutil.Process()
-print("memory used: ")
-print(process.memory_info().rss / 1e+6 + " megabytes")  # in megabytes 
-print("")
-print("")
+
 
 
 defective_prob_u = 0.20  # Probability of receiving a defective item from Uzumaki Safety Suppliers
