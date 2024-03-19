@@ -1,17 +1,9 @@
-#task 2
 import random
 import os
 import psutil
 from memory_profiler import profile
 
-@profile
-
-#shows the memeory used by program
-#process = psutil.Process()
-#print("memory used: ")
-#print(process.memory_info().rss / 1e+6 )  # in megabytes 
-#print("")
-#print("")
+MAX_ORDERS = 100  # Maximum orders allowed
 
 # Function to load orders from a text file
 def load_orders_from_file(filename):
@@ -30,10 +22,16 @@ def save_orders_to_file(filename, orders):
     with open(filename, "w") as file:
         for orderid, items in orders.items():
             file.write(f"{orderid}: {', '.join(items)}\n")
-            
-            
+
+    print(f"Orders saved to: {os.path.abspath(filename)}")
+
+@profile
 # Function to add an order
 def order_add(firstaid, orders):
+    if len(orders) >= MAX_ORDERS:
+        print("Maximum orders reached. Cannot add more orders.")
+        return
+
     order = []  # Create an empty list to store the order items
     orderid = random.randint(0, 5000)  # Generate a random order ID
     print("Order ID:", orderid)
@@ -43,15 +41,16 @@ def order_add(firstaid, orders):
         if product_code == "done":
             break
         if product_code in firstaid:
+            quantity = int(input("Enter the quantity: "))
             product_name = firstaid[product_code]
-            order.append(product_name)
-            print(f"Added {product_name} to the order.")
+            order.extend([product_name] * quantity)  # Add multiple items based on quantity
+            print(f"Added {quantity} {product_name}(s) to the order.")
         else:
             print("Invalid product code. Please try again.")
 
     orders[orderid] = order  # Add the order to the orders dictionary
-    
-    
+
+@profile
 # Function to delete an order
 def delete_order(orders):
     orderid = int(input("Enter the order ID to delete: "))
@@ -61,6 +60,7 @@ def delete_order(orders):
     else:
         print("Order ID not found.")
 
+@profile
 # Function to modify an order
 def modify_order(orders, firstaid):
     orderid = int(input("Enter the order ID to modify: "))
@@ -73,17 +73,17 @@ def modify_order(orders, firstaid):
             if product_code == "done":
                 break
             if product_code in firstaid:
+                quantity = int(input("Enter the quantity: "))
                 product_name = firstaid[product_code]
-                new_order.append(product_name)
-                count += 1
-                print(f"Added {product_name} to the order.")
+                new_order.extend([product_name] * quantity)  # Add multiple items based on quantity
+                count += quantity
+                print(f"Added {quantity} {product_name}(s) to the order.")
             else:
                 print("Invalid product code. Please try again.")
         orders[orderid] = new_order  # Update the order in the orders dictionary
         print("Order modified successfully.")
     else:
         print("Order ID not found.")
-
 
 # Main part of the code
 filename = "orders.txt"  # Specify the filename for storing orders
@@ -117,19 +117,13 @@ while True:
         print("")
         print("")
         order_add(firstaid, orders)
-        # Print the location where the order file is saved
-        print("Orders saved to:", os.path.abspath(filename))
     elif option == 2:
         print(firstaid)
         print("")
         print("")
         modify_order(orders, firstaid)
-        # Print the location where the order file is saved
-        print("Orders saved to:", os.path.abspath(filename))
     elif option == 3:
         delete_order(orders)
-        # Print the location where the order file is saved
-        print("Orders saved to:", os.path.abspath(filename))
     elif option == 4:
         break
     else:
