@@ -3,6 +3,8 @@ import os
 import psutil
 from memory_profiler import profile
 
+MAX_ORDERS = 20  # Maximum orders allowed
+
 # Function to load orders from a text file
 def load_orders_from_file(filename):
     try:
@@ -20,11 +22,14 @@ def save_orders_to_file(filename, orders):
     with open(filename, "w") as file:
         for orderid, items in orders.items():
             file.write(f"{orderid}: {', '.join(items)}\n")
-            
+
+    print(f"Orders saved to: {os.path.abspath(filename)}")
+    print(f"Maximum orders allowed: {MAX_ORDERS}")
+
 @profile
 # Function to add an order
 def order_add(firstaid, orders):
-    before_memory = psutil.Process().memory_info().rss / 1e6
+    
     order = []  # Create an empty list to store the order items
     orderid = random.randint(0, 5000)  # Generate a random order ID
     print("Order ID:", orderid)
@@ -34,33 +39,32 @@ def order_add(firstaid, orders):
         if product_code == "done":
             break
         if product_code in firstaid:
+            quantity = int(input("Enter the quantity: "))
             product_name = firstaid[product_code]
-            order.append(product_name)
-            print(f"Added {product_name} to the order.")
+            order.extend([product_name] * quantity)  # Add multiple items based on quantity
+            print(f"Added {quantity} {product_name}(s) to the order.")
         else:
             print("Invalid product code. Please try again.")
 
     orders[orderid] = order  # Add the order to the orders dictionary
-    after_memory = psutil.Process().memory_info().rss / 1e6
-    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
+   
 
 @profile
 # Function to delete an order
 def delete_order(orders):
-    before_memory = psutil.Process().memory_info().rss / 1e6
+   
     orderid = int(input("Enter the order ID to delete: "))
     if orderid in orders:
         del orders[orderid]
         print(f"Order with ID {orderid} deleted successfully.")
     else:
         print("Order ID not found.")
-    after_memory = psutil.Process().memory_info().rss / 1e6
-    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
+   
 
 @profile
 # Function to modify an order
 def modify_order(orders, firstaid):
-    before_memory = psutil.Process().memory_info().rss / 1e6
+    
     orderid = int(input("Enter the order ID to modify: "))
     if orderid in orders:
         print("Current order:", orders[orderid])
@@ -71,18 +75,18 @@ def modify_order(orders, firstaid):
             if product_code == "done":
                 break
             if product_code in firstaid:
+                quantity = int(input("Enter the quantity: "))
                 product_name = firstaid[product_code]
-                new_order.append(product_name)
-                count += 1
-                print(f"Added {product_name} to the order.")
+                new_order.extend([product_name] * quantity)  # Add multiple items based on quantity
+                count += quantity
+                print(f"Added {quantity} {product_name}(s) to the order.")
             else:
                 print("Invalid product code. Please try again.")
         orders[orderid] = new_order  # Update the order in the orders dictionary
         print("Order modified successfully.")
     else:
         print("Order ID not found.")
-    after_memory = psutil.Process().memory_info().rss / 1e6
-    print(f"Memory usage before: {before_memory} MB, after: {after_memory} MB")
+    
 
 
 # Main part of the code
