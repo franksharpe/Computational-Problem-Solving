@@ -65,7 +65,9 @@ def delete_order(orders):
 def modify_order(orders, firstaid):
     orderid = int(input("Enter the order ID to modify: "))
     if orderid in orders:
-        print("Current order:", orders[orderid])
+        print("Current order:")
+        for item in orders[orderid]:
+            print(item)  # Print each item on a different line
         new_order = []  # Create a new order to replace the existing one
         count = 0  # Initialize count of items added
         while count < 1:  # Allowing a maximum of 5 items per order
@@ -88,11 +90,11 @@ def modify_order(orders, firstaid):
 # Main part of the code
 filename = "orders.txt"  # Specify the filename for storing orders
 firstaid = {  # Define the first aid items with their corresponding codes
-    "1001": "plasters, Sterile Gauze Pads, Adhesive Tape",
-    "1002": "Antiseptic Wipes, Antibiotic Ointment, Scissors",
-    "1003": "Adhesive Tape ,Antiseptic Wipes ,Scissors",
-    "1004": "Antiseptic Wipes , Instant Cold Packs ,Emergency Blanket",
-    "1005": "Antibiotic Ointment ,First Aid Manual, Sterile Eyewash Solution"
+    "1001": "plasters , Sterile Gauze Pads , Adhesive Tape\n",
+    "1002": "Antiseptic Wipes , Antibiotic Ointment, Scissors\n\n",
+    "1003": "Adhesive Tape, Antiseptic Wipes, Scissors\n\n",
+    "1004": "Antiseptic Wipes, Instant Cold Packs, Emergency Blanket\n\n",
+    "1005": "Antibiotic Ointment, First Aid Manual, Sterile Eyewash Solution\n"
 }
 orders = load_orders_from_file(filename)  # Load orders from the file
 
@@ -113,13 +115,19 @@ while True:
 
     # Perform operations (add, delete, modify, exit)
     if option == 1:  
-        print(firstaid)
-        print("")
+        print("First Aid Items:")
+        for code, items in firstaid.items():
+            print(f"Product Code: {code}")
+            print(items)
+            print("")  # Add an empty line between items
         print("")
         order_add(firstaid, orders)
     elif option == 2:
-        print(firstaid)
-        print("")
+        print("First Aid Items:")
+        for code, items in firstaid.items():
+            print(f"Product Code: {code}")
+            print(items)
+            print("")  # Add an empty line between items
         print("")
         modify_order(orders, firstaid)
     elif option == 3:

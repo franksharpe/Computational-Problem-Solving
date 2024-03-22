@@ -107,6 +107,9 @@ firstaid = {  # Define the first aid items with their corresponding codes
     "1013": "Burn Cream",
     "1014": "First Aid Manual"
 }
+# Update the firstaid dictionary to print each item on a new line
+firstaid = {code: f"{code}: {item}\n" for code, item in firstaid.items()}
+
 orders = load_orders_from_file(filename)  # Load orders from the file
 
 while True:
@@ -126,13 +129,15 @@ while True:
 
     # Perform operations (add, delete, modify, exit)
     if option == 1:  
-        print(firstaid)
-        print("")
+        print("First Aid Items:")
+        for item in firstaid.values():
+            print(item)  # Print each item on a new line
         print("")
         order_add(firstaid, orders)
     elif option == 2:
-        print(firstaid)
-        print("")
+        print("First Aid Items:")
+        for item in firstaid.values():
+            print(item)  # Print each item on a new line
         print("")
         modify_order(orders, firstaid)
     elif option == 3:
