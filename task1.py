@@ -1,5 +1,3 @@
-# libarys 
-
 import random
 import os
 import psutil
@@ -7,7 +5,7 @@ from memory_profiler import profile
 
 MAX_ORDERS = 20  # Maximum orders allowed
 
-# Function to load orders from a text file
+#load orders from file
 def load_orders_from_file(filename):
     try:
         # Open the file for reading
@@ -15,10 +13,20 @@ def load_orders_from_file(filename):
             orders = {}  # Initialize an empty dictionary to store orders
             # Iterate through each line in the file
             for line in file:
-                # Split each line into orderid and items
-                orderid, items = line.strip().split(":")
-                # Convert orderid to integer and split items into a list
-                orders[int(orderid)] = items.split(",")
+                line = line.strip()
+                if not line:  # Skip empty lines
+                    continue
+                parts = line.split(":")  # Split each line into parts by colon
+                if len(parts) < 2:  # Check if the line has at least two parts
+                    print(f"Skipping line: {line}. Unexpected format.")
+                    continue
+                try:
+                    orderid = int(parts[0].strip())  # Try converting the order ID to an integer
+                except ValueError:
+                    print(f"Skipping line: {line}. Invalid order ID format.")
+                    continue
+                items = ":".join(parts[1:]).split(",")  # Handle items containing colons
+                orders[orderid] = [item.strip() for item in items]
     except FileNotFoundError:
         # If the file is not found, return an empty dictionary
         orders = {}
@@ -35,45 +43,48 @@ def save_orders_to_file(filename, orders):
     print(f"Orders saved to: {os.path.abspath(filename)}") # shows where saved to
     print(f"Maximum orders allowed: {MAX_ORDERS}") # show max orders 
 
-@profile
+
+
 # Function to add an order 
 def order_add(firstaid, orders):
-    
     order = []  # Create an empty list to store the order items
-    orderid = random.randint(0, 5000)  # Generate a random order ID from 0 to 5000
+    orderid = len(orders) + 1  # Assign incremental order IDs
     print("Order ID:", orderid)
     
-    while len(order) < 5:  # Allowing a maximum of 5 items per order
+    total_items = 0  # Initialize total items counter
+    
+    while total_items < 5:  # Allow a maximum of 5 items per order
         product_code = input("Enter the product code (e.g., 1001) or 'done' to finish: ")
         if product_code == "done":
-            break   # Ends the code if "done" is selected 
+            break   # End the code if "done" is selected 
         if product_code in firstaid:
-            quantity = int(input("Enter the quantity: ")) 
-            product_name = firstaid[product_code]
-            order.extend([product_name] * quantity)  # Add multiple items based on quantity
-            print(f"Added {quantity} {product_name}(s) to the order.")
+            quantity = int(input("Enter the quantity: "))
+            if total_items + quantity <= 5:  # Check if adding these items exceeds the limit
+                product_name = firstaid[product_code]
+                order.extend([product_name] * quantity)  # Add multiple items based on quantity
+                total_items += quantity
+                print(f"Added {quantity} {product_name}(s) to the order.")
+            else:
+                print("Total items exceed the limit of 5. Please try again.")
         else:
             print("Invalid product code. Please try again.")
 
-    orders[orderid] = order  # Add the order to the orders dictionary , once ended saved to the file
-   
+    orders[orderid] = order  # Add the order to the orders dictionary
 
-@profile
 # Function to delete an order
 def delete_order(orders):
-   
     orderid = int(input("Enter the order ID to delete: ")) # takes the user input
     if orderid in orders:  # Checks if the order id is in orders
         del orders[orderid]
         print(f"Order with ID {orderid} deleted successfully.") # output msg
     else:
         print("Order ID not found.") # error message
-   
 
-@profile
+# Function to modify an order
 # Function to modify an order
 def modify_order(orders, firstaid):
-    
+    print("Existing Order IDs:")
+    print(list(orders.keys()))  # Display existing order IDs
     orderid = int(input("Enter the order ID to modify: ")) # gets user input
     if orderid in orders: # checks if order id is in file
         print("Current order:", orders[orderid])
@@ -85,17 +96,20 @@ def modify_order(orders, firstaid):
                 break
             if product_code in firstaid: # checks the input aligns up
                 quantity = int(input("Enter the quantity: "))
-                product_name = firstaid[product_code]
-                new_order.extend([product_name] * quantity)  # Add multiple items based on quantity
-                count += quantity
-                print(f"Added {quantity} {product_name}(s) to the order.") # output message
+                if count + quantity <= 5:  # Check if adding these items exceeds the limit
+                    product_name = firstaid[product_code]
+                    new_order.extend([product_name] * quantity)  # Add multiple items based on quantity
+                    count += quantity
+                    print(f"Added {quantity} {product_name}(s) to the order.") # output message
+                else:
+                    print("Total items exceed the limit of 5. Please try again.")
             else:
                 print("Invalid product code. Please try again.")
         orders[orderid] = new_order  # Update the order in the orders dictionary
         print("Order modified successfully.")
     else:
         print("Order ID not found.")
-    
+
 
 filename = "orders.txt"  # Specify the filename for storing orders
 firstaid = {  # Define the first aid items with their corresponding codes
