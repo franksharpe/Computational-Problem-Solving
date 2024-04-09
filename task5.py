@@ -3,7 +3,7 @@
 
 defective_prob_u = 0.20  # Probability of receiving a defective item from Uzumaki Safety Suppliers
 defective_prob_k = 0.10  # Probability of receiving a defective item from Khairan Safety Company
-defective_prob_l = 0  # Probability of receiving a defective item from Leaf First-Aid Kits Ltd
+defective_prob_l = 0.10  # Probability of receiving a defective item from Leaf First-Aid Kits Ltd
 
 # (a) Probability of receiving a defective item from each supplier
 prob_defective_u = 0.50 * defective_prob_u  # Probability of receiving a defective item from Uzumaki Safety Suppliers

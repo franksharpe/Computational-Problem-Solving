@@ -1,9 +1,32 @@
 import random
 import os
-import psutil
 from memory_profiler import profile
 
 MAX_ORDERS = 100  # Maximum orders allowed
+
+class Order:
+    def __init__(self, order_id, items):
+        self.order_id = order_id
+        self.items = items
+
+    def add_item(self, item):
+        self.items.append(item)
+
+    def remove_item(self, item):
+        if item in self.items:
+            self.items.remove(item)
+
+    def modify_item(self, old_item, new_item):
+        if old_item in self.items:
+            index = self.items.index(old_item)
+            self.items[index] = new_item
+
+    def display_order(self):
+        print(f"Order ID: {self.order_id}")
+        print("Items:")
+        for item in self.items:
+            print(item)
+
 
 # Function to load orders from a text file
 def load_orders_from_file(filename):
@@ -12,7 +35,9 @@ def load_orders_from_file(filename):
             orders = {}
             for line in file:
                 orderid, items = line.strip().split(":")
-                orders[int(orderid)] = items.split(",")
+                order_id = int(orderid)
+                order_items = items.split(",")
+                orders[order_id] = Order(order_id, order_items)
     except FileNotFoundError:
         orders = {}
     return orders
@@ -20,9 +45,8 @@ def load_orders_from_file(filename):
 # Function to save orders to a text file
 def save_orders_to_file(filename, orders):
     with open(filename, "w") as file:
-        for orderid, items in orders.items():
-            file.write(f"{orderid}: {', '.join(items)}\n")
-
+        for orderid, order in orders.items():
+            file.write(f"{order.order_id}: {', '.join(order.items)}\n")
     print(f"Orders saved to: {os.path.abspath(filename)}")
 
 @profile
@@ -48,8 +72,7 @@ def order_add(firstaid, orders):
         else:
             print("Invalid product code. Please try again.")
 
-    orders[orderid] = order  # Add the order to the orders dictionary
-
+    orders[orderid] = Order(orderid, order)  # Add the order to the orders dictionary
 @profile
 # Function to delete an order
 def delete_order(orders):
@@ -59,15 +82,13 @@ def delete_order(orders):
         print(f"Order with ID {orderid} deleted successfully.")
     else:
         print("Order ID not found.")
-
 @profile
 # Function to modify an order
 def modify_order(orders, firstaid):
     orderid = int(input("Enter the order ID to modify: "))
     if orderid in orders:
         print("Current order:")
-        for item in orders[orderid]:
-            print(item)  # Print each item on a different line
+        orders[orderid].display_order()
         new_order = []  # Create a new order to replace the existing one
         count = 0  # Initialize count of items added
         while count < 1:  # Allowing a maximum of 5 items per order
@@ -82,7 +103,7 @@ def modify_order(orders, firstaid):
                 print(f"Added {quantity} {product_name}(s) to the order.")
             else:
                 print("Invalid product code. Please try again.")
-        orders[orderid] = new_order  # Update the order in the orders dictionary
+        orders[orderid] = Order(orderid, new_order)  # Update the order in the orders dictionary
         print("Order modified successfully.")
     else:
         print("Order ID not found.")
