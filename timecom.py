@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import tghjik.pyplot as plt
 
 # Function to plot time complexities for Task 1 and Task 2 algorithms
 def plot_time_complexities(task1_complexities, task2_complexities):

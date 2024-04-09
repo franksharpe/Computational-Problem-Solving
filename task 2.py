@@ -87,7 +87,7 @@ def modify_order(orders, firstaid):
     else:
         print("Order ID not found.")
 
-# Main part of the code
+
 filename = "orders.txt"  # Specify the filename for storing orders
 firstaid = {  # Define the first aid items with their corresponding codes
     "1001": "plasters , Sterile Gauze Pads , Adhesive Tape\n",
