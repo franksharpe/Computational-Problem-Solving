@@ -49,7 +49,7 @@ def save_orders_to_file(filename, orders):
             file.write(f"{order.order_id}: {', '.join(order.items)}\n")
     print(f"Orders saved to: {os.path.abspath(filename)}")
 
-@profile
+
 # Function to add an order
 def order_add(firstaid, orders):
     if len(orders) >= MAX_ORDERS:
@@ -73,7 +73,7 @@ def order_add(firstaid, orders):
             print("Invalid product code. Please try again.")
 
     orders[orderid] = Order(orderid, order)  # Add the order to the orders dictionary
-@profile
+
 # Function to delete an order
 def delete_order(orders):
     orderid = int(input("Enter the order ID to delete: "))
@@ -82,7 +82,7 @@ def delete_order(orders):
         print(f"Order with ID {orderid} deleted successfully.")
     else:
         print("Order ID not found.")
-@profile
+
 # Function to modify an order
 def modify_order(orders, firstaid):
     orderid = int(input("Enter the order ID to modify: "))

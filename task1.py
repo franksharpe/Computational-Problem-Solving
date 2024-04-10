@@ -36,12 +36,17 @@ def load_orders_from_file(filename):
 
 # Function to save orders to a text file
 def save_orders_to_file(filename, orders):
-    with open(filename, "w") as file: # open file as write
-        for orderid, items in orders.items():
-            file.write(f"{orderid}: {', '.join(items)}\n") # write orders in file each on new line
-
-    print(f"Orders saved to: {os.path.abspath(filename)}") # shows where saved to
+    with open(filename, "w") as file:
+        for orderid, order in orders.items():
+            order_items_with_quantity = {}  # Dictionary to hold items with their quantities
+            for item in order.items:
+                quantity = order.items.count(item)  # Count occurrences of each item
+                order_items_with_quantity[item] = quantity  # Store item with its quantity in dictionary
+            items_string = ', '.join([f"{item} ({quantity})" for item, quantity in order_items_with_quantity.items()])
+            file.write(f"{order.order_id}: {items_string}\n")
+    print(f"Orders saved to: {os.path.abspath(filename)}")
     print(f"Maximum orders allowed: {MAX_ORDERS}") # show max orders 
+
 
 
 
@@ -80,7 +85,7 @@ def delete_order(orders):
     else:
         print("Order ID not found.") # error message
 
-# Function to modify an order
+
 # Function to modify an order
 def modify_order(orders, firstaid):
     print("Existing Order IDs:")
