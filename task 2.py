@@ -46,7 +46,12 @@ def load_orders_from_file(filename):
 def save_orders_to_file(filename, orders):
     with open(filename, "w") as file:
         for orderid, order in orders.items():
-            file.write(f"{order.order_id}: {', '.join(order.items)}\n")
+            order_items_with_quantity = {}  # Dictionary to hold items with their quantities
+            for item in order.items:
+                quantity = order.items.count(item)  # Count occurrences of each item
+                order_items_with_quantity[item] = quantity  # Store item with its quantity in dictionary
+            items_string = ', '.join([f"{item} ({quantity})" for item, quantity in order_items_with_quantity.items()])
+            file.write(f"{order.order_id}: {items_string}\n")
     print(f"Orders saved to: {os.path.abspath(filename)}")
 
 
@@ -111,11 +116,11 @@ def modify_order(orders, firstaid):
 
 filename = "orders.txt"  # Specify the filename for storing orders
 firstaid = {  # Define the first aid items with their corresponding codes
-    "1001": "plasters , Sterile Gauze Pads , Adhesive Tape\n",
-    "1002": "Antiseptic Wipes , Antibiotic Ointment, Scissors\n\n",
-    "1003": "Adhesive Tape, Antiseptic Wipes, Scissors\n\n",
-    "1004": "Antiseptic Wipes, Instant Cold Packs, Emergency Blanket\n\n",
-    "1005": "Antibiotic Ointment, First Aid Manual, Sterile Eyewash Solution\n"
+    "1001": "plasters , Sterile Gauze Pads , Adhesive Tape",
+    "1002": "Antiseptic Wipes , Antibiotic Ointment, Scissors",
+    "1003": "Adhesive Tape, Antiseptic Wipes, Scissors",
+    "1004": "Antiseptic Wipes, Instant Cold Packs, Emergency Blanket",
+    "1005": "Antibiotic Ointment, First Aid Manual, Sterile Eyewash Solution"
 }
 orders = load_orders_from_file(filename)  # Load orders from the file
 
